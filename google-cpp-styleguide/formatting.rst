@@ -51,8 +51,6 @@
 
 使用 ``u8`` 前缀把带 ``uXXXX`` 转义序列的字符串字面值编码成 UTF-8. 不要用在本身就带 UTF-8 字符的字符串字面值上, 因为如果编译器不把源代码识别成 UTF-8, 输出就会出错.
 
-别用 C++11 的 ``char16_t`` 和 ``char32_t``, 它们和 UTF-8 文本没有关系, ``wchar_t`` 同理, 除非你写的代码要调用 Windows API, 后者广泛使用了 ``wchar_t``.
-
 9.3. 空格还是制表位
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -75,32 +73,32 @@
 
 函数看上去像这样:
 
-.. code-block:: c++
+.. code-block:: c
 
-    ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+    ReturnType FunctionName(Type par_name1, Type par_name2) {
       DoSomething();
       ...
     }
 
 如果同一行文本太多, 放不下所有参数:
 
-.. code-block:: c++
+.. code-block:: c
 
-    ReturnType ClassName::ReallyLongFunctionName(Type par_name1, Type par_name2,
-                                                 Type par_name3) {
+    ReturnType ReallyLongFunctionName(Type par_name1, Type par_name2,
+                                      Type par_name3) {
       DoSomething();
       ...
     }
 
 甚至连第一个参数都放不下:
 
-.. code-block:: c++
+.. code-block:: c
 
-    ReturnType LongClassName::ReallyReallyReallyLongFunctionName(
-        Type par_name1,  // 4 space indent
+    ReturnType ReallyReallyReallyLongFunctionName(
+        Type par_name1,  // 4个空格缩进
         Type par_name2,
         Type par_name3) {
-      DoSomething();  // 2 space indent
+      DoSomething();  // 2个空格缩进
       ...
     }
 
@@ -132,75 +130,28 @@
 
 - 换行后的参数保持 4 个空格的缩进.
 
-未被使用的参数, 或者根据上下文很容易看出其用途的参数, 可以省略参数名:
-
-.. code-block:: c++
-
-    class Foo {
-     public:
-      Foo(Foo&&);
-      Foo(const Foo&);
-      Foo& operator=(Foo&&);
-      Foo& operator=(const Foo&);
-    };
+未被使用的参数, 或者根据上下文很容易看出其用途的参数, 可以省略参数名.
 
 未被使用的参数如果其用途不明显的话, 在函数定义处将参数名注释起来:
 
-.. code-block:: c++
+.. code-block:: c
 
-    class Shape {
-     public:
-      virtual void Rotate(double radians) = 0;
-    };
+    void RotateCircle(double /*radians*/) {}
 
-    class Circle : public Shape {
-     public:
-      void Rotate(double radians) override;
-    };
-
-    void Circle::Rotate(double /*radians*/) {}
-
-.. code-block:: c++
+.. code-block:: c
 
     // 差 - 如果将来有人要实现, 很难猜出变量的作用.
-    void Circle::Rotate(double) {}
+    void RotateCircle(double) {}
 
-属性, 和展开为属性的宏, 写在函数声明或定义的最前面, 即返回类型之前:
+属性和展开为属性的宏, 写在函数声明或定义的最前面, 即返回类型之前:
 
-.. code-block:: c++
+.. code-block:: c
 
     MUST_USE_RESULT bool IsOK();
 
-9.5. Lambda 表达式
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获列表同理, 表项用逗号隔开.
-
-**说明**
-
-若用引用捕获, 在变量名和 ``&`` 之间不留空格.
-
-.. code-block:: c++
-
-    int x = 0;
-    auto add_to_x = [&x](int n) { x += n; };
-
-短 lambda 就写得和内联函数一样.
-
-.. code-block:: c++
-
-    std::set<int> blacklist = {7, 8, 9};
-    std::vector<int> digits = {3, 9, 1, 8, 4, 7, 1};
-    digits.erase(std::remove_if(digits.begin(), digits.end(), [&blacklist](int i) {
-                   return blacklist.find(i) != blacklist.end();
-                 }),
-                 digits.end());
-
 .. _function-calls:
 
-9.6. 函数调用
+9.5. 函数调用
 ~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -211,20 +162,20 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 函数调用遵循如下形式：
 
-.. code-block:: c++
+.. code-block:: c
 
     bool retval = DoSomething(argument1, argument2, argument3);
 
 如果同一行放不下, 可断为多行, 后面每一行都和第一个实参对齐, 左圆括号后和右圆括号前不要留空格：
 
-.. code-block:: c++
+.. code-block:: c
 
     bool retval = DoSomething(averyveryveryverylongargument1,
                               argument2, argument3);
 
 参数也可以放在次行, 缩进四格：
 
-.. code-block:: c++
+.. code-block:: c
 
     if (...) {
       ...
@@ -239,14 +190,14 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 如果一些参数本身就是略复杂的表达式, 且降低了可读性, 那么可以直接创建临时变量描述该表达式, 并传递给函数：
 
-.. code-block:: c++
+.. code-block:: c
 
     int my_heuristic = scores[x] * y + bases[x];
     bool retval = DoSomething(my_heuristic, x, y, z);
 
 或者放着不管, 补充上注释：
 
-.. code-block:: c++
+.. code-block:: c
 
     bool retval = DoSomething(scores[x] * y + bases[x],  // Score heuristic.
                               x, y, z);
@@ -255,55 +206,14 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 此外, 如果一系列参数本身就有一定的结构, 可以酌情地按其结构来决定参数格式：
 
-.. code-block:: c++
+.. code-block:: c
 
     // 通过 3x3 矩阵转换 widget.
     my_widget.Transform(x1, x2, x3,
                         y1, y2, y3,
                         z1, z2, z3);
 
-.. _braced-initializer-list-format:
-
-9.7. 列表初始化格式
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-您平时怎么格式化函数调用, 就怎么格式化 :ref:`列表初始化 <braced-initializer-list>`.
-
-**说明**
-
-如果列表初始化伴随着名字, 比如类型或变量名, 格式化时将将名字视作函数调用名, `{}` 视作函数调用的括号. 如果没有名字, 就视作名字长度为零.
-
-.. code-block:: c++
-
-    // 一行列表初始化示范.
-    return {foo, bar};
-    functioncall({foo, bar});
-    pair<int, int> p{foo, bar};
-
-    // 当不得不断行时.
-    SomeFunction(
-        {"assume a zero-length name before {"},  // 假设在 { 前有长度为零的名字.
-        some_other_function_parameter);
-    SomeType variable{
-        some, other, values,
-        {"assume a zero-length name before {"},  // 假设在 { 前有长度为零的名字.
-        SomeOtherType{
-            "Very long string requiring the surrounding breaks.",  // 非常长的字符串, 前后都需要断行.
-            some, other values},
-        SomeOtherType{"Slightly shorter string",  // 稍短的字符串.
-                      some, other, values}};
-    SomeType variable{
-        "This is too long to fit all in one line"};  // 字符串过长, 因此无法放在同一行.
-    MyType m = {  // 注意了, 您可以在 { 前断行.
-        superlongvariablename1,
-        superlongvariablename2,
-        {short, interior, list},
-        {interiorwrappinglist,
-         interiorwrappinglist2}};
-
-9.8. 条件语句
+9.6. 条件语句
 ~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -316,7 +226,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 最常见的是没有空格的格式. 哪一种都可以, 最重要的是 *保持一致*. 如果你是在修改一个文件, 参考当前已有格式. 如果是写新的代码, 参考目录下或项目中其它文件. 还在犹豫的话, 就不要加空格了.
 
-.. code-block:: c++
+.. code-block:: c
 
     if (condition) {  // 圆括号里没有空格.
       ...  // 2 空格缩进.
@@ -328,7 +238,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 如果你更喜欢在圆括号内部加空格:
 
-.. code-block:: c++
+.. code-block:: c
 
     if ( condition ) {  // 圆括号与空格紧邻 - 不常见
       ...  // 2 空格缩进.
@@ -338,26 +248,26 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 注意所有情况下 ``if`` 和左圆括号间都有个空格. 右圆括号和左大括号之间也要有个空格:
 
-.. code-block:: c++
+.. code-block:: c
 
     if(condition)     // 差 - IF 后面没空格.
     if (condition){   // 差 - { 前面没空格.
     if(condition){    // 变本加厉地差.
 
-.. code-block:: c++
+.. code-block:: c
 
     if (condition) {  // 好 - IF 和 { 都与空格紧邻.
 
 如果能增强可读性, 简短的条件语句允许写在同一行. 只有当语句简单并且没有使用 ``else`` 子句时使用:
 
-.. code-block:: c++
+.. code-block:: c
 
-    if (x == kFoo) return new Foo();
-    if (x == kBar) return new Bar();
+    if (x == kFoo) return Foo();
+    if (x == kBar) return Bar();
 
 如果语句有 ``else`` 分支则不允许:
 
-.. code-block:: c++
+.. code-block:: c
 
     // 不允许 - 当有 ELSE 分支时 IF 块却写在同一行
     if (x) DoThis();
@@ -365,7 +275,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 通常, 单行语句不需要使用大括号, 如果你喜欢用也没问题; 复杂的条件或循环语句用大括号可读性会更好. 也有一些项目要求 ``if`` 必须总是使用大括号:
 
-.. code-block:: c++
+.. code-block:: c
 
     if (condition)
       DoSomething();  // 2 空格缩进.
@@ -376,7 +286,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 但如果语句中某个 ``if-else`` 分支使用了大括号的话, 其它分支也必须使用:
 
-.. code-block:: c++
+.. code-block:: c
 
     // 不可以这样子 - IF 有大括号 ELSE 却没有.
     if (condition) {
@@ -392,7 +302,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
     }
 
 
-.. code-block:: c++
+.. code-block:: c
 
     // 只要其中一个分支用了大括号, 两个分支都要用上大括号.
     if (condition) {
@@ -401,7 +311,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
       bar;
     }
 
-9.9. 循环和开关选择语句
+9.7. 循环和开关选择语句
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -414,7 +324,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 如果有不满足 ``case`` 条件的枚举值, ``switch`` 应该总是包含一个 ``default`` 匹配 (如果有输入值没有 case 去处理, 编译器将给出 warning). 如果 ``default`` 应该永远执行不到, 简单的加条 ``assert``:
 
-.. code-block:: c++
+.. code-block:: c
 
     switch (var) {
       case 0: {  // 2 空格缩进
@@ -432,7 +342,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 在单语句循环里, 括号可用可不用：
 
-.. code-block:: c++
+.. code-block:: c
 
     for (int i = 0; i < kSomeNumber; ++i)
       printf("I love you\n");
@@ -443,7 +353,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 空循环体应使用 ``{}`` 或 ``continue``, 而不是一个简单的分号.
 
-.. code-block:: c++
+.. code-block:: c
 
     while (condition) {
       // 反复循环直到条件失效.
@@ -451,11 +361,11 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
     for (int i = 0; i < kSomeNumber; ++i) {}  // 可 - 空循环体.
     while (condition) continue;  // 可 - contunue 表明没有逻辑.
 
-.. code-block:: c++
+.. code-block:: c
 
     while (condition);  // 差 - 看起来仅仅只是 while/loop 的部分之一.
 
-9.10. 指针和引用表达式
+9.8. 指针和取地址
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -466,7 +376,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 下面是指针和引用表达式的正确使用范例:
 
-.. code-block:: c++
+.. code-block:: c
 
     x = *p;
     p = &x;
@@ -479,27 +389,20 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 - 指针操作符 ``*`` 或 ``&`` 后没有空格.
 
-在声明指针变量或参数时, 星号与类型或变量名紧挨都可以:
+在声明指针变量或参数时, 星号与变量名紧挨:
 
-.. code-block:: c++
+.. code-block:: c
 
     // 好, 空格前置.
     char *c;
-    const string &str;
 
-    // 好, 空格后置.
-    char* c;
-    const string& str;
+.. code-block:: c
 
-.. code-block:: c++
-
-    int x, *y;  // 不允许 - 在多重声明中不能使用 & 或 *
     char * c;  // 差 - * 两边都有空格
-    const string & str;  // 差 - & 两边都有空格.
 
 在单个文件内要保持风格一致, 所以, 如果是修改现有文件, 要遵照该文件的风格.
 
-9.11. 布尔表达式
+9.9. 布尔表达式
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -510,7 +413,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 下例中, 逻辑与 (``&&``) 操作符总位于行尾:
 
-.. code-block:: c++
+.. code-block:: c
 
     if (this_one_thing > this_other_thing &&
         a_third_thing == a_fourth_thing &&
@@ -520,7 +423,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 注意, 上例的逻辑与 (``&&``) 操作符均位于行尾. 这个格式在 Google 里很常见, 虽然把所有操作符放在开头也可以. 可以考虑额外插入圆括号, 合理使用的话对增强可读性是很有帮助的. 此外, 直接用符号形式的操作符, 比如 ``&&`` 和 ``~``, 不要用词语形式的 ``and`` 和 ``compl``.
 
-9.12. 函数返回值
+9.10. 函数返回值
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -531,53 +434,19 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 只有在写 ``x = expr`` 要加上括号的时候才在 ``return expr;`` 里使用括号.
 
-.. code-block:: c++
+.. code-block:: c
 
     return result;                  // 返回值很简单, 没有圆括号.
     // 可以用圆括号把复杂表达式圈起来, 改善可读性.
     return (some_long_condition &&
             another_condition);
 
-.. code-block:: c++
+.. code-block:: c
 
     return (value);                // 毕竟您从来不会写 var = (value);
     return(result);                // return 可不是函数！
 
-9.13. 变量及数组初始化
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-用 ``=``, ``()`` 和 ``{}`` 均可.
-
-**说明**
-
-您可以用 ``=``, ``()`` 和 ``{}``, 以下的例子都是正确的：
-
-.. code-block:: c++
-
-    int x = 3;
-    int x(3);
-    int x{3};
-    string name("Some Name");
-    string name = "Some Name";
-    string name{"Some Name"};
-
-请务必小心列表初始化 ``{...}`` 用 ``std::initializer_list`` 构造函数初始化出的类型. 非空列表初始化就会优先调用 ``std::initializer_list``, 不过空列表初始化除外, 后者原则上会调用默认构造函数. 为了强制禁用 ``std::initializer_list`` 构造函数, 请改用括号.
-
-.. code-block:: c++
-
-    vector<int> v(100, 1);  // 内容为 100 个 1 的向量.
-    vector<int> v{100, 1};  // 内容为 100 和 1 的向量.
-
-此外, 列表初始化不允许整型类型的四舍五入, 这可以用来避免一些类型上的编程失误. 
-
-.. code-block:: c++
-
-    int pi(3.14);  // 好 - pi == 3.
-    int pi{3.14};  // 编译错误: 缩窄转换.
-
-9.14. 预处理指令
+9.11. 预处理指令
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -588,7 +457,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 
 即使预处理指令位于缩进代码块中, 指令也应从行首开始.
 
-.. code-block:: c++
+.. code-block:: c
 
     // 好 - 指令从行首开始
       if (lopsided_score) {
@@ -601,7 +470,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
         BackToNormal();
       }
 
-.. code-block:: c++
+.. code-block:: c
 
     // 差 - 指令缩进
       if (lopsided_score) {
@@ -611,133 +480,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
         BackToNormal();
       }
 
-9.15. 类格式
-~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-访问控制块的声明依次序是 ``public:``, ``protected:``, ``private:``, 每个都缩进 1 个空格.
-
-**说明**
-
-类声明 (下面的代码中缺少注释, 参考 :ref:`类注释 <class-comments>`) 的基本格式如下:
-
-.. code-block:: c++
-
-    class MyClass : public OtherClass {
-     public:      // 注意有一个空格的缩进
-      MyClass();  // 标准的两空格缩进
-      explicit MyClass(int var);
-      ~MyClass() {}
-
-      void SomeFunction();
-      void SomeFunctionThatDoesNothing() {
-      }
-
-      void set_some_var(int var) { some_var_ = var; }
-      int some_var() const { return some_var_; }
-
-     private:
-      bool SomeInternalFunction();
-
-      int some_var_;
-      int some_other_var_;
-    };
-
-注意事项:
-
-- 所有基类名应在 80 列限制下尽量与子类名放在同一行.
-
-- 关键词 ``public:``, ``protected:``, ``private:`` 要缩进 1 个空格.
-
-- 除第一个关键词 (一般是 ``public``) 外, 其他关键词前要空一行. 如果类比较小的话也可以不空.
-
-- 这些关键词后不要保留空行.
-
-- ``public`` 放在最前面, 然后是 ``protected``, 最后是 ``private``.
-
-- 关于声明顺序的规则请参考 :ref:`声明顺序 <declaration-order>` 一节.
-
-9.16. 构造函数初始值列表
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-构造函数初始化列表放在同一行或按四格缩进并排多行.
-
-**说明**
-
-下面两种初始值列表方式都可以接受:
-
-.. code-block:: c++
-
-    // 如果所有变量能放在同一行:
-    MyClass::MyClass(int var) : some_var_(var) {
-      DoSomething();
-    }
-
-    // 如果不能放在同一行,
-    // 必须置于冒号后, 并缩进 4 个空格
-    MyClass::MyClass(int var)
-        : some_var_(var), some_other_var_(var + 1) {
-      DoSomething();
-    }
-
-    // 如果初始化列表需要置于多行, 将每一个成员放在单独的一行
-    // 并逐行对齐
-    MyClass::MyClass(int var)
-        : some_var_(var),             // 4 space indent
-          some_other_var_(var + 1) {  // lined up
-      DoSomething();
-    }
-
-    // 右大括号 } 可以和左大括号 { 放在同一行
-    // 如果这样做合适的话
-    MyClass::MyClass(int var)
-        : some_var_(var) {}
-
-9.17. 命名空间格式化
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**总述**
-
-命名空间内容不缩进.
-
-**说明**
-
-:ref:`命名空间 <namespaces>` 不要增加额外的缩进层次, 例如:
-
-.. code-block:: c++
-
-    namespace {
-
-    void foo() {  // 正确. 命名空间内没有额外的缩进.
-      ...
-    }
-
-    }  // namespace
-
-不要在命名空间内缩进:
-
-.. code-block:: c++
-
-    namespace {
-
-      // 错, 缩进多余了.
-      void foo() {
-        ...
-      }
-
-    }  // namespace
-
-声明嵌套命名空间时, 每个命名空间都独立成行.
-
-.. code-block:: c++
-
-    namespace foo {
-    namespace bar {
-
-9.19. 水平留白
+9.12. 水平留白
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -749,7 +492,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 通用
 =============================
 
-.. code-block:: c++
+.. code-block:: c
 
     void f(bool b) {  // 左大括号前总是有空格.
       ...
@@ -759,21 +502,12 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
     int x[] = { 0 };
     int x[] = {0};
 
-    // 继承与初始化列表中的冒号前后恒有空格.
-    class Foo : public Bar {
-     public:
-      // 对于单行函数的实现, 在大括号内加上空格
-      // 然后是函数实现
-      Foo(int b) : Bar(), baz_(b) {}  // 大括号里面是空的话, 不加空格.
-      void Reset() { baz_ = 0; }  // 用空格把大括号与实现分开.
-      ...
-
 添加冗余的留白会给其他人编辑时造成额外负担. 因此, 行尾不要留空格. 如果确定一行代码已经修改完毕, 将多余的空格去掉; 或者在专门清理空格时去掉（尤其是在没有其他人在处理这件事的时候). (Yang.Y 注: 现在大部分代码编辑器稍加设置后, 都支持自动删除行首/行尾空格, 如果不支持, 考虑换一款编辑器或 IDE)
 
 循环和条件语句
 =============================
 
-.. code-block:: c++
+.. code-block:: c
 
     if (b) {          // if 条件语句和循环语句关键字后均有空格.
     } else {          // else 前后有空格.
@@ -793,7 +527,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 操作符
 =============================
 
-.. code-block:: c++
+.. code-block:: c
 
     // 赋值运算符前后总是有空格.
     x = 0;
@@ -810,19 +544,7 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
     if (x && !y)
       ...
 
-模板和转换
-=============================
-
-.. code-block:: c++
-
-    // 尖括号(< and >) 不与空格紧邻, < 前没有空格, > 和 ( 之间也没有.
-    vector<string> x;
-    y = static_cast<char*>(x);
-
-    // 在类型与指针操作符之间留空格也可以, 但要保持一致.
-    vector<char *> x;
-
-9.19. 垂直留白
+9.14. 垂直留白
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 **总述**
@@ -852,10 +574,9 @@ Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获�
 #. 除函数定义的左大括号可以置于行首外, 包括函数/类/结构体/枚举声明, 各种语句的左大括号置于行尾, 所有右大括号独立成行;
 #. ``.``/``->`` 操作符前后不留空格, ``*``/``&`` 不要前后都留, 一个就可, 靠左靠右依各人喜好;
 #. 预处理指令/命名空间不使用额外缩进, 类/结构体/枚举/函数/语句使用缩进;
-#. 初始化用 ``=`` 还是 ``()`` 依个人喜好, 统一就好;
 #. ``return`` 不要加 ``()``;
 #. 水平/垂直留白不要滥用, 怎么易读怎么来.
-#. 关于 UNIX/Linux 风格为什么要把左大括号置于行尾 (``.cc`` 文件的函数实现处, 左大括号位于行首), 我的理解是代码看上去比较简约, 想想行首除了函数体被一对大括号封在一起之外, 只有右大括号的代码看上去确实也舒服; Windows 风格将左大括号置于行首的优点是匹配情况一目了然.
+#. 关于 UNIX/Linux 风格为什么要把左大括号置于行尾 (``.c`` 文件的函数实现处, 左大括号位于行首), 我的理解是代码看上去比较简约, 想想行首除了函数体被一对大括号封在一起之外, 只有右大括号的代码看上去确实也舒服; Windows 风格将左大括号置于行首的优点是匹配情况一目了然.
 
 译者（acgtyrant）笔记
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

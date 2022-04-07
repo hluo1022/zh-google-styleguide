@@ -22,12 +22,22 @@
         `acgtyrant <http://acgtyrant.com>`_
         `lilinsanity <http://github.com/lilinsanity>`_
 
+:修改:
+    .. line-blocker::
+
+        `Hao Luo <https://github.com/hluo1022>`
+
 :项目主页:
 
     - `Google Style Guide <http://google-styleguide.googlecode.com>`_
     - `Google 开源项目风格指南 - 中文版 <http://github.com/zh-google-styleguide/zh-google-styleguide>`_
 
-0.1 译者前言
+0.1 修改说明
+--------------
+
+这篇风格声明是在Google Style Guide 中文版的基础上，制定的一套 C 语言编程风格指导。它主要的目的是制定<项目名称>的编码规范，以提高代码的可读性。这篇规定对原来文档中 C++ 的特有属性进行了删减，去掉了C++的一些语言特性相关的部分，同时针对项目的需要做了特殊处理。
+
+0.2 译者前言
 --------------------
 
 Google 经常会发布一些开源项目, 意味着会接受来自其他代码贡献者的代码. 但是如果代码贡献者的编程风格与 Google 的不一致, 会给代码阅读者和其他代码提交者造成不小的困扰. Google 因此发布了这份自己的编程风格指南, 使所有提交代码的人都能获知 Google 的编程风格.
@@ -60,8 +70,7 @@ Google 经常会发布一些开源项目, 意味着会接受来自其他代码�
 
     - 2008-07 1.0 : 出自 `YuleFox 的 Blog <http://www.yulefox.com/?p=207>`_, 很多地方摘录的也是该版本.
 
-
-0.2 背景
+0.3 背景
 --------------
 
 C++ 是 Google 大部分开源项目的主要编程语言. 正如每个 C++ 程序员都知道的, C++ 有很多强大的特性, 但这种强大不可避免的导致它走向复杂，使代码更容易产生 bug, 难以阅读和维护.

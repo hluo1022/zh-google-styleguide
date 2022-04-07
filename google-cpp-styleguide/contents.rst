@@ -2,7 +2,7 @@
 
 .. _cpp_contents:
 
-C++ 风格指南 - 内容目录
+C 风格指南 - 内容目录
 ========================================
 
 .. contents::
@@ -13,9 +13,7 @@ C++ 风格指南 - 内容目录
    index
    headers
    scoping
-   classes
    functions
-   magic
    others
    naming
    comments
