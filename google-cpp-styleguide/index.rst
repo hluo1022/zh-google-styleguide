@@ -23,7 +23,7 @@
         `lilinsanity <http://github.com/lilinsanity>`_
 
 :修改:
-    .. line-blocker::
+    .. line-block::
 
         `Hao Luo <https://github.com/hluo1022>`
 
